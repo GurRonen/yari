@@ -1,19 +1,19 @@
 # Yari
 
-a toy project that tries to match the [Redis][redis-home] API one-to-one (+ a REST interface) while focusing on using major libraries and tools from the rust framework. 
+a project that tries to match the [Redis][redis-home] API one-to-one (+ a REST interface) while focusing on using major libraries and tools from the rust framework. 
 
-
-## Commands plan (just basics, not all flags)
+## Roadmap
+### Commands plan (just basics, not all flags)
 
 - [X] GET
 - [X] SET
 - [X] DEL
 - [X] EXPIRE (Including randomized active expiration)
 
-## Interfaces to be implemented
+### Interfaces to be implemented
 - [X] HTTP
-- [] CLI
-- [] GRPC
+- [ ] CLI
+- [ ] GRPC
 
 
 
