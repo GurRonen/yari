@@ -1288,7 +1288,9 @@ dependencies = [
 name = "yari"
 version = "0.1.0"
 dependencies = [
+ "bytes",
  "config",
+ "rand",
  "serde",
  "tokio",
  "warp",
