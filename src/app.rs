@@ -1,3 +1,4 @@
+use log::*;
 use std::time::Duration;
 
 use bytes::Bytes;
@@ -35,8 +36,10 @@ pub(crate) async fn run_app<T: YariKeyspace + Send + 'static>(
     rx: Receiver<YariCommand>,
     tx: Sender<YariCommand>,
 ) {
+    info!("Attempting to run main app loop");
     let expiration_duration = Duration::from_millis((1000 / settings.expiration.active.ticks_per_second).into());
 
+    debug!("starting expiration task with expiration_duration: {:?}", expiration_duration);
     let expiration_task = tokio::spawn(async move { start_expiration_loop(expiration_duration, tx).await });
     let db_task = tokio::spawn(async move { start_db_access_loop(rx, db).await; });
 
@@ -54,11 +57,11 @@ async fn start_db_access_loop<T: YariKeyspace + Send + 'static>(
         #[allow(unused_must_use)]
         match command {
             YariCommand::Get { key, resp } => {
-                let get_response = db.yari_get(&key);
+                let get_response = db.get(&key);
                 resp.send(Ok(get_response.map(|f| f.clone())));
             }
             YariCommand::Set { key, value, resp } => {
-                db.yari_set(key, value);
+                db.set(key, value);
                 resp.send(Ok(Some(Bytes::from("OK"))));
             }
             YariCommand::Expire {
@@ -66,11 +69,11 @@ async fn start_db_access_loop<T: YariKeyspace + Send + 'static>(
                 duration,
                 resp,
             } => {
-                let expiration_response = db.yari_expire(&key, duration);
+                let expiration_response = db.expire(&key, duration);
                 resp.send(Ok(expiration_response));
             }
             YariCommand::InternalActiveExpire {} => {
-                db.yari_active_expiration();
+                db.active_expiration();
             }
         }
     }

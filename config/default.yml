@@ -1,7 +1,7 @@
 server.http.address: "127.0.0.1"
 server.http.port: 3030
 
-expiration:
-  active:
-    ticks_per_second: 10
-    number_of_random_keys_per_tick: 20
+app.commands_depth: 32
+
+expiration.active.ticks_per_second: 10
+expiration.active.number_of_random_keys_per_tick: 20

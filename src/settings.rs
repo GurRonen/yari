@@ -1,7 +1,14 @@
 use std::env;
 
 use config::{Config, File, ConfigError};
+use log::debug;
 use serde::Deserialize;
+
+#[derive(Debug, Deserialize, Clone)]
+#[allow(unused)]
+pub(crate) struct App {
+    pub(crate) commands_depth: usize
+}
 
 #[derive(Debug, Deserialize, Clone)]
 #[allow(unused)]
@@ -33,7 +40,8 @@ pub(crate) struct Active {
 #[allow(unused)]
 pub(crate) struct Settings {
     pub(crate) server: Server,
-    pub(crate) expiration: Expiration
+    pub(crate) expiration: Expiration,
+    pub(crate) app: App
 }
 
 impl Settings {
@@ -45,7 +53,7 @@ impl Settings {
             .add_source(File::with_name(&format!("config/{}", run_mode)).required(false))
             .build()?;
 
-        println!("{:?}", &config);
+        debug!("{:?}", &config);
         config.try_deserialize()
     }
 }
